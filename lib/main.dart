@@ -6,28 +6,52 @@ main() => runApp(PerguntaApp());
 
 class _PerguntaAppState extends State<PerguntaApp> {
   int _perguntaSelecionada = 0;
+  var _pontuacaoTotal = 0;
 
   final List<Map<String, Object>> _perguntas = const [
     {
       'texto': "Qual sua cor favorita?",
-      'respostas': ["Preto", "Verde", "Vermelho", "Branco"],
+      'respostas': [
+        {'texto': "Preto", 'pontuacao': 10},
+        {'texto': "Verde", 'pontuacao': 5},
+        {'texto': "Vermelho", 'pontuacao': 3},
+        {'texto': "Branco", 'pontuacao': 1},
+      ],
     },
     {
       'texto': "Qual é o seu animal favorito?",
-      'respostas': ["Coelho", "Cobra", "Elefante", "Leão"],
+      'respostas': [
+        {'texto': "Coelho", 'pontuacao': 10},
+        {'texto': "Cobra", 'pontuacao': 5},
+        {'texto': "Elefante", 'pontuacao': 2},
+        {'texto': "Leão", 'pontuacao': 3},
+      ],
     },
     {
       'texto': "Qual é a sua estação favorita?",
-      'respostas': ["Outono", "Verão", "Inverno", "Primavera"],
+      'respostas': [
+        {'texto': "Outono", 'pontuacao': 5},
+        {'texto': "Verão", 'pontuacao': 4},
+        {'texto': "Inverno", 'pontuacao': 1},
+        {'texto': "Primavera", 'pontuacao': 7},
+      ],
     }
   ];
 
-  void _responder() {
+  void _responder(int pontuacao) {
     if (temPerguntaSelecionada) {
       setState(() {
         _perguntaSelecionada++;
+        _pontuacaoTotal += pontuacao;
       });
     }
+  }
+
+  void _reiniciarQuestionario() {
+    setState(() {
+      _perguntaSelecionada = 0;
+      _pontuacaoTotal = 0;
+    });
   }
 
   bool get temPerguntaSelecionada => _perguntaSelecionada < _perguntas.length;
@@ -44,7 +68,7 @@ class _PerguntaAppState extends State<PerguntaApp> {
                 perguntas: _perguntas,
                 perguntaSelecionada: _perguntaSelecionada,
                 quandoResponder: _responder)
-            : Resultado("Parabéns!!"),
+            : Resultado(_pontuacaoTotal, _reiniciarQuestionario),
       ),
     );
   }
